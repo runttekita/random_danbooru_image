@@ -3,10 +3,27 @@ const express = require('express')
 const app = express()
 const port = 5000
 
+let animeGirlsILike = [
+  'sakura_futaba',
+  'shiodome_miuna',
+  'kousaka_reina',
+  'akemi_homura',
+  'makise_kurisu',
+  'tezuka_rin',
+  'hikawa_hina',
+  'hikawa_sayo',
+  'minato_yukina',
+  'shirasagi_chisato',
+  'chiyoda_momo',
+  'shinomiya_kaguya'
+]
+
 // Perform a search for popular image posts
-function search(res, tag) {
+function search(res, tag, random) {
   const booru = new Danbooru()
-  if (!tag) {
+  if (random === 'true' && !tag) {
+    tag = animeGirlsILike[Math.floor(Math.random() * animeGirlsILike.length)]
+  } else if (random != 'true' && !tag) {
     tag = ''
   }
   booru.posts({ tags: 'rating:safe ' + tag}).then(posts => {
@@ -24,7 +41,7 @@ function search(res, tag) {
 
 
 app.get('/', (req, res) => {
-  search(res, req.query.tag)
+  search(res, req.query.tag, req.query.random)
 })
 
-app.listen(port, () => console.log(`dab`))
+app.listen(port, () => console.log(`Running!`))
